@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Darts Cricket Counter</string>
+    <string name="current_player_toast">It is now %s\'s turn</string>
+    <string name="trippleBullseyeNotice">There is no tripple bulls eye. Please only chose valid combinations</string>
+    <string name="back_to_start">Back to start</string>
+    <string name="play_again">Play again</string>
+    <string name="result_text">Congratulations %1$s, you won! %2$s, better luck next time</string>
+</resources>
