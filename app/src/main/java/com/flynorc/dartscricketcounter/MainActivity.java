@@ -14,15 +14,10 @@ import android.widget.RatingBar;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RatingBar mRatingBar;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
     }
 
     public void startGame(View v) {

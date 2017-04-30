@@ -22,8 +22,6 @@ public class ResultsActivity extends AppCompatActivity {
         //update the text
         TextView resultsText = (TextView) findViewById(R.id.results_text_field);
         resultsText.setText(String.format(getResources().getString(R.string.result_text), mWinningPlayerName, mLosingPlayerName));
-
-
     }
 
 
@@ -38,12 +36,12 @@ public class ResultsActivity extends AppCompatActivity {
 
     public void playAgain(View v) {
         Intent i = new Intent(ResultsActivity.this, CricketScorerActivity.class);
-
         //put the player name information to the intent
         //losing player goes first in the next game
         i.putExtra("player1Name", mLosingPlayerName);
         i.putExtra("player2Name", mWinningPlayerName);
 
         startActivity(i);
+        finish();
     }
 }

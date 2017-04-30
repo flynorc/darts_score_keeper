@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -53,8 +52,6 @@ public class CricketScorerActivity extends AppCompatActivity {
         savedInstanceState.putParcelable("player2", player2);
         savedInstanceState.putBoolean("isPlayer1Turn", mIsPlayer1Turn);
         savedInstanceState.putInt("dartsLeft", mDartsLeft);
-
-        Log.d("saving", "saving stuff");
     }
 
 
@@ -65,7 +62,6 @@ public class CricketScorerActivity extends AppCompatActivity {
 
 
         if (savedInstanceState == null) {
-            Log.d("onCreate", "saved instance state is null... initializing");
             //get the player names from intent
             String player1Name = getIntent().getStringExtra("player1Name");
             String player2Name = getIntent().getStringExtra("player2Name");
@@ -73,19 +69,12 @@ public class CricketScorerActivity extends AppCompatActivity {
             initialize(player1Name, player2Name);
         }
         else {
-            Log.d("onCreate", "saved instance state is NOT null... doing other stuff");
-
-            Log.d("restoring", "restoring stuff");
             player1 = savedInstanceState.getParcelable("player1");
             player2 = savedInstanceState.getParcelable("player2");
             mIsPlayer1Turn= savedInstanceState.getBoolean("isPlayer1Turn");
             mDartsLeft= savedInstanceState.getInt("dartsLeft");
 
-            Log.d("resored", player1.toString());
-            Log.d("resored", player2.toString());
-
-
-            //initialization not needed, all the data was restored from savedInstanceState
+            //initialization not needed, all the data was restored from savedInstanceState so all that is left to do is to update the UI
             findElementsFromLayout();
             //show to the user who the active player is (who's turn it is)
             updateCurrentPlayerTextType();
@@ -93,13 +82,10 @@ public class CricketScorerActivity extends AppCompatActivity {
             updateNrDarts();
             //show player points
             updateLayouts();
-
         }
 
         createOnTouchListenerForDartboardImage();
         updateScoreboard();
-
-
     }
 
     /*
@@ -118,19 +104,17 @@ public class CricketScorerActivity extends AppCompatActivity {
                 final int evX = (int) ev.getX();
                 final int evY = (int) ev.getY();
 
+                /*
+                 * at the moment this could be a simple if statement, but to be more future proof in case we might need to do something on ACTION_DOWN
+                 * it is done using switch
+                 */
                 switch (action) {
-                    case MotionEvent.ACTION_DOWN :
-                        //we do nothing on press down, we are handling all the work when user releases the "click"
-                        Log.d("pressed down", "not doing anything, just debugging actually");
-                        break;
                     case MotionEvent.ACTION_UP :
-                        Log.d("pressed up", "now it's time for action, ready, set, GO!");
                         // on the UP, we do the click action.
                         // the hidden image (image_areas) has 7 different hotspots on it.
                         // the colors are red - bullseye, green - 20, blue - 19, yellow - 18, pink - 17, teal - 16, black - 15
                         //get the color where the user "clicked" (released the click)
                         int touchColor = getHotspotColor (R.id.imageAreas, evX, evY);
-                        Log.d("color", touchColor + "");
 
                         // compare the touchColor to the expected values.
                         // to find out which number was "hit" and then call the functions to handle the darts logic (rules and such)
@@ -142,11 +126,9 @@ public class CricketScorerActivity extends AppCompatActivity {
                         for(int i=0; i < mMaskColors.length; i++) {
                             //check if it matches
                             if(closeMatch (mMaskColors[i], touchColor, tolerance)) {
-                                //we have a match, yeey
-                                Log.d("color match", "index: " + i);
                                 //call the function that handles the hit
+                                //and no need to look further, we found what color it was
                                 hit(i, checkNrHits());
-                                //no need to look further, we found what color it was
                                 break;
                             }
                         }
@@ -182,8 +164,6 @@ public class CricketScorerActivity extends AppCompatActivity {
      * we also decrease number of darts available and check if its time to change the player already
      */
     private void hit(int index, int nrHits) {
-        Log.d("hit", "index: " + index + " nrHits" + nrHits);
-
         // check if tripple hit and index 6 (tripple 25 does not exist), notify user about problem
         if(nrHits == 3 && index == 6) {
             //notify user of error
@@ -194,7 +174,7 @@ public class CricketScorerActivity extends AppCompatActivity {
             return;
         }
 
-        //loop for number of hits
+        //loop for number of hits - to cover the double and triple hits
         for(int i=0; i<nrHits; i++) {
             if (mIsPlayer1Turn) {
                 //player one hit something
@@ -221,6 +201,7 @@ public class CricketScorerActivity extends AppCompatActivity {
             }
         }
 
+        //update the UI
         unselectMultiplyButtons();
         updateScore();
         updateProgressBar(index);
@@ -255,6 +236,7 @@ public class CricketScorerActivity extends AppCompatActivity {
                 i.putExtra("losingPlayerName", player2.getName());
                 i.putExtra("winningPlayerName", player1.getName());
                 startActivity(i);
+                finish();
             }
         }
         else {
@@ -266,8 +248,8 @@ public class CricketScorerActivity extends AppCompatActivity {
                 i.putExtra("losingPlayerName", player1.getName());
                 i.putExtra("winningPlayerName", player2.getName());
                 startActivity(i);
+                finish();
             }
-
         }
     }
 
@@ -361,7 +343,6 @@ public class CricketScorerActivity extends AppCompatActivity {
         //find elements from the layout that we need to manipulate later on
         findElementsFromLayout();
 
-
         //initialize the CricketScore objects to hold all the important player statistics
         player1 = new CricketScore(player1Name);
         player2 = new CricketScore(player2Name);
@@ -369,11 +350,6 @@ public class CricketScorerActivity extends AppCompatActivity {
         //player 1 goes first and he has 3 darts
         mIsPlayer1Turn = true;
         mDartsLeft = 3;
-
-
-
-
-
 
         //show to the user who the active player is (who's turn it is)
         updateCurrentPlayerTextType();
@@ -396,6 +372,10 @@ public class CricketScorerActivity extends AppCompatActivity {
         mPlayer2NameView.setText(player2.getName());
     }
 
+    /*
+     * find (and store) references to the View elements we need to manipulate during the app execution
+     * this is done in the initialization phase so the app does not to search for elements in the layout with every click, making it more responsive/faster
+     */
     private void findElementsFromLayout() {
         mPlayer1NameView = (TextView) findViewById(R.id.player1_name);
         mPlayer2NameView = (TextView) findViewById(R.id.player2_name);
@@ -518,8 +498,6 @@ public class CricketScorerActivity extends AppCompatActivity {
      * at the same time we make sure button x3 (tripple hit) is deselected, this only needs to happen when x2 was not selected to begin with
      */
     public void multiHit2(View v) {
-        Log.d("multihit", "x2 clicked, current state: " + mX2Button.isSelected() + ".");
-
         //update the selected value and background color of x2 button
         if(mX2Button.isSelected()) {
             mX2Button.setSelected(false);
@@ -542,8 +520,6 @@ public class CricketScorerActivity extends AppCompatActivity {
      * at the same time we make sure button x2 (double hit) is deselected, this only needs to happen when x3 was not selected to begin with
      */
     public void multiHit3(View v) {
-        Log.d("multihit", "x3 clicked, current state: " + mX3Button.isSelected() + ".");
-
         //update the selected value and background color of x3 button
         if(mX3Button.isSelected()) {
             mX3Button.setSelected(false);
