@@ -8,7 +8,8 @@ import android.widget.TextView;
 
 public class ResultsActivity extends AppCompatActivity {
 
-    private String mLosingPlayerName, mWinningPlayerName;
+    private String mLosingPlayerName;
+    private String mWinningPlayerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

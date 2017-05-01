@@ -17,13 +17,23 @@ import android.widget.Toast;
 
 public class CricketScorerActivity extends AppCompatActivity {
 
-    private CricketScore player1, player2;
+    private CricketScore player1;
+    private CricketScore player2;
     private Boolean mIsPlayer1Turn;
     private int mDartsLeft;
 
-    private TextView mPlayer1NameView, mPlayer2NameView, mPlayer1ScoreView, mPlayer2ScoreView, mPlayer1NrDartsView, mPlayer2NrDartsView;
-    private RatingBar[] mPlayer1ProgressBars, mPlayer2ProgressBars;
-    private Button mX2Button, mX3Button;
+    private TextView mPlayer1NameView;
+    private TextView mPlayer2NameView;
+    private TextView mPlayer1ScoreView;
+    private TextView mPlayer2ScoreView;
+    private TextView mPlayer1NrDartsView;
+    private TextView mPlayer2NrDartsView;
+
+    private RatingBar[] mPlayer1ProgressBars;
+    private RatingBar[] mPlayer2ProgressBars;
+
+    private Button mX2Button;
+    private Button mX3Button;
 
     private ImageView mDartboardImageView;
 

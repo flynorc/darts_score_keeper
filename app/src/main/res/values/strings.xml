@@ -5,4 +5,5 @@
     <string name="back_to_start">Back to start</string>
     <string name="play_again">Play again</string>
     <string name="result_text">Congratulations %1$s, you won! %2$s, better luck next time</string>
+    <string name="start_the_game_button">Start the game</string>
 </resources>
